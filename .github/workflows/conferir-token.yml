@@ -11,4 +11,5 @@ jobs:
       - name: Conferir de qual conta e o token
         env:
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          IG_USER_ID: "17841440161217196"
         run: python3 publicar.py --conferir

@@ -77,11 +77,10 @@ def publicar(item, dados, base):
     conferir_arquivo(video, "video/")
     conferir_arquivo(capa, "image/")
 
-    conta = chamar("GET", "me", {"fields": "user_id,username"})
+    uid, nome = identificar()
     esperado = os.environ.get("IG_USERNAME", "bolsodesenhado")
-    if conta.get("username", "").lower() != esperado.lower():
-        raise ErroApi(f"token de outra conta: {conta.get('username')}")
-    uid = conta["user_id"]
+    if nome.lower() != esperado.lower():
+        raise ErroApi(f"token de outra conta: {nome}")
 
     cont = chamar("POST", f"{uid}/media", {
         "media_type": "REELS", "video_url": video, "cover_url": capa,
@@ -116,15 +115,30 @@ def publicar(item, dados, base):
     return True
 
 
+def identificar():
+    """Devolve (id da conta do Instagram, nome de usuario) para o token atual.
+    Com IG_USER_ID (token de usuario do sistema), pergunta pela conta; senao, usa /me."""
+    ig = os.environ.get("IG_USER_ID", "").strip()
+    if ig:
+        conta = chamar("GET", ig, {"fields": "id,username"})
+        return conta["id"], conta.get("username", "")
+    conta = chamar("GET", "me", {"fields": "user_id,username"})
+    return conta["user_id"], conta.get("username", "")
+
+
 def conferir():
-    """So confere o token: diz de qual conta ele e, sem publicar nada."""
-    try:
-        conta = chamar("GET", "me", {"fields": "user_id,username"})
-    except ErroApi as e:
-        print(f"ATENCAO: o token nao funcionou: {e}")
-        return 1
-    print(f"token OK: conta @{conta.get('username')}")
-    return 0
+    """So confere o token, nos dois enderecos da API, sem publicar nada."""
+    global API
+    ok = False
+    for base in ("https://graph.facebook.com", "https://graph.instagram.com"):
+        API = base
+        try:
+            uid, nome = identificar()
+            print(f"token OK em {base}: conta @{nome} (id {uid})")
+            ok = True
+        except (ErroApi, KeyError) as e:
+            print(f"nao funcionou em {base}: {e}")
+    return 0 if ok else 1
 
 
 def main():

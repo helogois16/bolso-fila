@@ -17,6 +17,8 @@ jobs:
       - name: Publicar o Reel da hora
         env:
           IG_TOKEN: ${{ secrets.IG_TOKEN }}
+          IG_USER_ID: "17841440161217196"
+          IG_API_BASE: https://graph.facebook.com
           PUBLIC_BASE: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
         run: python3 publicar.py
       - name: Guardar o estado da fila

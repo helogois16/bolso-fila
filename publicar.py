@@ -116,7 +116,20 @@ def publicar(item, dados, base):
     return True
 
 
+def conferir():
+    """So confere o token: diz de qual conta ele e, sem publicar nada."""
+    try:
+        conta = chamar("GET", "me", {"fields": "user_id,username"})
+    except ErroApi as e:
+        print(f"ATENCAO: o token nao funcionou: {e}")
+        return 1
+    print(f"token OK: conta @{conta.get('username')}")
+    return 0
+
+
 def main():
+    if "--conferir" in sys.argv:
+        return conferir()
     with open(FILA, encoding="utf-8") as f:
         dados = json.load(f)
     # Um "enviando" que sobrou significa que a execucao anterior morreu no meio.

@@ -1,8 +1,8 @@
 # Como ativar o agente do Instagram
 
-Leva cerca de 30 minutos e só precisa ser feito uma vez. É tudo grátis.
+**Ativado em 09/11/2026.** Este guia fica como registro, caso seja preciso refazer. É tudo grátis.
 
-**Nunca cole o token, a senha ou a chave em uma conversa.** Eles vão direto nos campos indicados abaixo.
+**Nunca cole o token ou a senha em uma conversa.** Eles vão direto nos campos indicados abaixo.
 
 Os nomes dos botões da Meta e do GitHub mudam com o tempo. Se algum estiver diferente, me avise e eu te guio pela tela.
 
@@ -23,28 +23,23 @@ Depois que eu enviar os arquivos:
 
 ## Parte 2: Meta (token do Instagram)
 
-A conta do Instagram precisa ser **profissional**, de criador ou empresa.
+Feito em 09/11/2026. Fica registrado aqui caso seja preciso refazer.
 
-1. Entre em **developers.facebook.com** e toque em **Meus apps**, depois em **Criar app**.
-2. Dê o nome `Bolso Fila`. No caso de uso, escolha a opção de **gerenciar mensagens e conteúdo no Instagram**.
-3. Dentro do app, abra **Configuração da API com login do Instagram**.
-4. Em **Gerar tokens de acesso**, adicione a conta **@bolsodesenhado** e autorize com o seu login.
-5. Se pedir, aceite o convite de testador no Instagram, em **Configurações**, **Apps e sites**.
-6. Toque em **Gerar token** e deixe a tela aberta para a próxima parte.
+A conta do Instagram precisa ser **profissional**, de criador ou empresa. Apps novos da Meta não têm mais o "login do Instagram", então o caminho é o **login unificado**.
 
-## Parte 3: guardar as chaves no GitHub
+1. Em **developers.facebook.com**, crie o app `Bolso Fila` com o caso de uso **Gerenciar mensagens e conteúdo no Instagram**.
+2. Em **Casos de uso**, **Personalizar**, **API setup with Unified login**, ligue o app ao portfólio **helo_gois**.
+3. Em **Funções do app**, adicione **bolsodesenhado** como **Testador do Instagram** e aceite o convite no Instagram, em `instagram.com/accounts/manage_access/`.
+4. De volta ao login unificado, no passo 1, toque em **Criar nova configuração** e depois em **Criar do modelo**. O token dessa configuração **nunca expira**.
+5. No passo 2, toque em **Gerar token** na linha da **bolsodesenhado** e autorize. Se pedir uma Página do Facebook, pode escolher qualquer uma sua: o token não publica em páginas.
+
+## Parte 3: guardar o token no GitHub
 
 No repositório, abra **Settings**, **Secrets and variables**, **Actions** e toque em **New repository secret**.
 
-1. **Name:** `IG_TOKEN`. **Secret:** cole o token da Meta. Salve.
+- **Name:** `IG_TOKEN`. **Secret:** cole o token da Meta. Salve.
 
-Agora crie a chave que mantém o token renovado:
-
-2. Na sua foto do GitHub, abra **Settings**, **Developer settings**, **Personal access tokens**, **Fine-grained tokens** e **Generate new token**.
-3. Em **Expiration**, escolha o maior prazo que aparecer e anote a data.
-4. Em **Repository access**, escolha **Only select repositories** e marque `bolso-fila`.
-5. Em **Permissions**, coloque **Secrets** como **Read and write**. Gere e copie.
-6. Crie outro segredo no repositório. **Name:** `GH_ADMIN`. **Secret:** cole essa chave.
+Para conferir sem publicar nada: em **Actions**, abra **Conferir token** e toque em **Run workflow**. O registro deve mostrar `token OK em https://graph.facebook.com: conta @bolsodesenhado`.
 
 ---
 
@@ -75,4 +70,4 @@ O GitHub manda um e-mail avisando. Na fila (`fila.json`), o status mostra o que 
 
 - O repositório é **público**: quem tiver o endereço vê os vídeos da fila antes da hora. Nele não entram o e-book, o código de acesso nem as chaves.
 - O GitHub desliga agendamentos em repositórios sem nenhum commit por **60 dias**. Se a fila ficar parada esse tempo, reative em **Actions**.
-- A chave `GH_ADMIN` vence na data que você anotou. Antes disso, gere outra e substitua o segredo.
+- O token não vence. Ele só para de funcionar se você remover o app **Bolso Fila** ou tirar a @bolsodesenhado dele. Nesse caso, gere outro e substitua o `IG_TOKEN`.

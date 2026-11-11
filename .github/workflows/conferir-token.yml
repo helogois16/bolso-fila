@@ -5,7 +5,7 @@ permissions:
   contents: read
 jobs:
   conferir:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - name: Conferir de qual conta e o token
